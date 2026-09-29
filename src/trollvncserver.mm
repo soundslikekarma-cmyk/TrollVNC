@@ -4575,6 +4575,8 @@ static void setupRfbScreen(int argc, const char *argv[]) {
 
     TVBindHostKind hostKind = tvClassifyBindHost(gBindHost, &v4Addr, &v6Addr);
     if (hostKind == kTVBindHostKindIPv4) {
+        // Do not leave the other VNC address family listening on all interfaces.
+        gScreen->ipv6port = 0;
         gScreen->listenInterface = v4Addr;
     } else if (hostKind == kTVBindHostKindIPv6) {
         char ifaceBuf[INET6_ADDRSTRLEN];
@@ -4583,6 +4585,7 @@ static void setupRfbScreen(int argc, const char *argv[]) {
             TVPrintError("Failed to normalize IPv6 bind host");
             exit(EXIT_FAILURE);
         }
+        gScreen->port = 0;
         gScreen->listen6Interface = strdup(iface);
     } else if (hostKind == kTVBindHostKindInvalid && gBindHost) {
         TVPrintError("Invalid host address: %s", [gBindHost UTF8String]);

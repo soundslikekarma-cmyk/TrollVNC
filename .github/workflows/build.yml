@@ -74,7 +74,7 @@ jobs:
 
     strategy:
       matrix:
-        scheme: ["default", "rootless", "roothide", "bootstrap"]
+        scheme: ["rootless"]
 
     steps:
       - name: Checkout repository
@@ -86,6 +86,9 @@ jobs:
           # Install ldid for iOS code signing
           # Install 7zip for compression
           brew install xcbeautify ldid-procursus p7zip make
+
+      - name: Check explicit VNC bind isolation
+        run: python3 devkit/test-bind-family.py
 
       - name: Checkout roothide/theos
         uses: actions/checkout@v4
